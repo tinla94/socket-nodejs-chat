@@ -11,10 +11,18 @@ const io = socketio(server)
 
 app.use(express.static(publicDirectoryPath));
 
+let count = 0;
 // connecting socketio
-io.on('connection', () => {
-    console.log('New webscoket connection!')
-})
+io.on('connection', (socket) => {
+    console.log(`Connecting with websocket`);
+    // setup  counting for accessing
+    socket.emit('countUpdated', count)
+    socket.on('increment', () => {
+        count++
+        // socket.emit('countUpdated', count)
+        io.emit('countUpdated', count)
+    });
+});
 // port
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Listening to port ${port}`));

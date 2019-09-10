@@ -16,13 +16,19 @@ let count = 0;
 io.on('connection', (socket) => {
     console.log(`Connecting with websocket`);
     // setup  counting for accessing
-    socket.emit('countUpdated', count)
-    socket.on('increment', () => {
-        count++
-        // socket.emit('countUpdated', count)
-        io.emit('countUpdated', count)
+    socket.emit('message', 'Welcome!');
+    socket.broadcast.emit('message', 'A new user has joined chat!');
+    socket.on('sendMessage', (message) => {
+        io.emit('message', message);
+    });
+
+    // disconnecting
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left this chat room!');
     });
 });
+
+
 // port
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Listening to port ${port}`));

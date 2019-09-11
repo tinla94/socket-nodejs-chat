@@ -12,7 +12,6 @@ const io = socketio(server)
 
 app.use(express.static(publicDirectoryPath));
 
-let count = 0;
 // connecting socketio
 io.on('connection', (socket) => {
     console.log(`Connecting with websocket`);

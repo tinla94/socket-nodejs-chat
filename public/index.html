@@ -13,7 +13,12 @@
         <button id="send-location">Send location</button>
         <script id="message-template" type="text/html">
             <div>
-                <p>{{message}}</p>
+                <p>{{createdAt}} - {{message}}</p>
+            </div>
+        </script>
+        <script id="location-message-template" type="text/html">
+            <div>
+                <p><a href="{{mapUrl}}" target="blank">Check location</a></p>
             </div>
         </script>
         <script src="/socket.io/socket.io.js"></script>

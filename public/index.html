@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head></head>
+    <head>
+        <title>Socketio Chat App</title>
+        <link rel="icon" href="/img/favicon.png">
+        <link rel="stylesheet" href="/css/styles.min.css">
+    </head>
     <body>
-        Chat App
-        <div id="messages">
-
+        <div class="chat">
+            <div class="chat__sidebar">
+            </div>
+            <div class="chat__main">
+                <div id="messages" class="chat__messages"></div>
+                <div class="compose">
+                    <form id="message-form">
+                        <input name="message" placeholder="enter a text" />
+                        <button type="submit">Send</button>
+                    </form>
+                    <button id="send-location">Send location</button>
+                </div>
+            </div>
         </div>
-        <form id="message-form">
-            <input name="message" placeholder="enter a text" />
-            <button type="submit">Send</button>
-        </form>
-        <button id="send-location">Send location</button>
         <script id="message-template" type="text/html">
-            <div>
-                <p>{{createdAt}} - {{message}}</p>
+            <div class="message">
+                <p>
+                    <span class="message__name">Some User Name</span>
+                    <span class="message__meta">{{createdAt}}</span>
+                </p>
+                <p>{{message}}</p>
             </div>
         </script>
         <script id="location-message-template" type="text/html">
             <div>
-                <p><a href="{{mapUrl}}" target="blank">Check location</a></p>
+                <p>{{createdAt}} - <a href="{{mapUrl}}" target="blank">Check location</a></p>
             </div>
         </script>
         <script src="/socket.io/socket.io.js"></script>

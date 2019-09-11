@@ -39,7 +39,10 @@ io.on('connection', (socket) => {
         socket.join(user.room); // joining room 
         socket.emit('message', generateMessage('Admin', `Welcome to room ${user.room}`));
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined the room!`));
-
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getAllUsers(user.room)
+        });
         callback();
     });
 
@@ -67,8 +70,12 @@ io.on('connection', (socket) => {
         const user = removeUser(socket.id);
 
         if (user) {
-            io.to(user.room).emit('message', generateMessage('Admin', `${user} has left the room!`));
-        }
+            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left the room!`));
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getAllUsers(user.room)
+            });
+        };
     });
 });
 

@@ -13,6 +13,20 @@ const $messages = document.querySelector('#messages');
 const messasgeTemplate = document.querySelector('#message-template').innerHTML;
 const locationmessageTemplate = document.querySelector('#location-message-template').innerHTML;
 
+// Options
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
+
+// join room 
+socket.on("join", ({ username, room }) => {
+  console.log(username, room);
+  socket.join(room); // emitting event
+
+  // setting up message sending for specific room 
+  io.to.emit
+
+})
+
+// sending out messages
 socket.on("message", message => {
   console.log(message);
   const html = Mustache.render(messasgeTemplate, {
@@ -22,6 +36,7 @@ socket.on("message", message => {
   $messages.insertAdjacentHTML('beforeend', html)
 });
 
+// sending out location
 socket.on("locationMessage", (mapUrl) => {
     console.log(mapUrl);
     const html  = Mustache.render(locationmessageTemplate, {
@@ -31,6 +46,7 @@ socket.on("locationMessage", (mapUrl) => {
     $messages.insertAdjacentHTML('beforeend', html);
 });
 
+// form submit for messages
 $messageForm.addEventListener("submit", e => {
   e.preventDefault();
 
@@ -49,6 +65,7 @@ $messageForm.addEventListener("submit", e => {
   });
 });
 
+// button to send out location
 $sendLocationButton.addEventListener("click", e => {   
   e.preventDefault();
   if (!navigator.geolocation) {
@@ -68,3 +85,7 @@ $sendLocationButton.addEventListener("click", e => {
     });
   });
 });
+
+
+// joinning rooms with username and room 
+socket.emit('join', { username, room })

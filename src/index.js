@@ -19,17 +19,24 @@ app.use(express.static(publicDirectoryPath));
 // connecting socketio
 io.on('connection', (socket) => {
     console.log(`Connecting with websocket`);
-    // setup  counting for accessing
-    socket.emit('message', generateMessage('Welcome!'));
-    socket.broadcast.emit('message', generateMessage('A new user has joine!'));
 
+
+    // sending message within the room 
+    socket.on('join', ({ username, room }) => {
+        socket.join(room); // joining room 
+        
+        socket.emit('message', generateMessage(`Welcome to room ${room}`));
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined the room!`));
+    })
+
+    // sending message
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter();
 
         if(filter.isProfane(message)) {
             return callback('Profanity is not allowed!');
         }
-        io.emit('message', generateMessage(message));
+        io.to('Center City').emit('message', generateMessage(message))
         callback();
     });
 
@@ -40,7 +47,7 @@ io.on('connection', (socket) => {
 
     // disconnecting
     socket.on('disconnect', () => {
-        io.emit('message', generateMessage('A user has left the room!'));
+        io.emit('message', generateMessage(`A user has left the room!`));
     });
 });
 

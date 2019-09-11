@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
         
         socket.emit('message', generateMessage(`Welcome to room ${room}`));
         socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined the room!`));
-    })
+    });
 
     // sending message
     socket.on('sendMessage', (message, callback) => {
